@@ -22,6 +22,9 @@ var x = canvas.width/2;
 var y = canvas.height-30;
 var dx = 2;
 var dy = -2;
+var paddleColor = "#77dd77";
+var ballColor = "#77dd77";
+var brickColor = "#77dd77";
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width-paddleWidth)/2;
@@ -105,7 +108,7 @@ function collisionDetection() {
 function drawBall() {
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-  ctx.fillStyle = "#77dd77";
+  ctx.fillStyle = ballColor;
   ctx.fill();
   ctx.closePath();
 }
@@ -114,9 +117,17 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = "#77dd77";
+  ctx.fillStyle = paddleColor;
   ctx.fill();
   ctx.closePath();
+}
+
+function randomColor() {
+    // return a random num 0-255 color string
+    let r = Math.floor(Math.random() * 256);
+    let g = Math.floor(Math.random() * 256);
+    let b = Math.floor(Math.random() * 256);
+    return `rgba(${r}, ${b}, ${g}, 1)`;
 }
 
 // Draws the bricks
@@ -130,7 +141,7 @@ function drawBricks() {
         bricks[c][r].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = "#77dd77";
+        ctx.fillStyle = brickColor;
         ctx.fill();
         ctx.closePath();
       }
@@ -164,13 +175,19 @@ function draw() {
 
   if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
     dx = -dx;
+    ballColor = randomColor();
   }
+
   if(y + dy < ballRadius) {
     dy = -dy;
+    ballColor = randomColor();
   }
+
   else if(y + dy > canvas.height-ballRadius) {
+
     if(x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
+      paddleColor = randomColor();
     }
     else {
       lives--;
